@@ -1,10 +1,10 @@
 let canvas: HTMLCanvasElement
 
-export const bootstrap = () => {
+export const bootstrap = (w = 250, h = 250) => {
   const $canvas = canvas || document.createElement('canvas')
 
-  $canvas.width = 250
-  $canvas.height = 250
+  $canvas.width = w
+  $canvas.height = h
 
   if (!canvas) {
     canvas = $canvas

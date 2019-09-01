@@ -13,19 +13,21 @@ const repeatArray = <T>(arr: T[], n: number) => {
 
 
 const width = 250
-const cols = 6
-const cellWidth = width / cols
-const isEven = cols % 2 === 0
 
-export const render = (name: string) => {
+export const render = (name: string, cols = 5) => {
+  if (cols > 50) return
+
+  const cellWidth = width / cols
+  const isEven = cols % 2 === 0
+
   const hash = md5(name)
-  const bytes = repeatArray(chunk(hash, 2), (Math.floor(cols / 2) + 1) / 3) as string[]
+  const bytes = repeatArray(chunk(hash, 2), cols * cols) as string[]
   const [r, g, b] = bytes
 
 
   const color = '#' + r + g + b
   const cells = bytes.map(byte => parseInt(byte, 16) % 2 === 0)
-  const grid = (chunk(cells, Math.floor(cols / 2) + 1) as any[][])
+  const grid = (chunk(cells, Math.floor(cols / 2) + Number(!isEven)) as any[][])
     .map(chunk => {
       const reverse = [...chunk].reverse()
       const [, ...notEvenReverse] = reverse
@@ -34,10 +36,6 @@ export const render = (name: string) => {
         ? [...chunk, ...reverse]
         : [...chunk, ...notEvenReverse]
     }) as unknown as boolean[][]
-
-  console.log(bytes)
-  console.log(grid)
-
 
   const { ctx } = bootstrap(width, width)
 
